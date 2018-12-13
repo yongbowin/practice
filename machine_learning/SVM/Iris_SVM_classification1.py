@@ -12,10 +12,8 @@
 import numpy as np
 import os
 
-from sklearn.grid_search import GridSearchCV
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report
-from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
 
 
@@ -36,28 +34,19 @@ y = y.flatten()
 # x.shape=(150,4)   y.shape=(150,)
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1, train_size=0.6)
 
+# clf = SVC(C=0.8, kernel='rbf', gamma=20, decision_function_shape='ovr')
+clf = SVC(C=1, kernel='rbf', gamma=0.3, decision_function_shape='ovr')
+clf.fit(x_train, y_train.ravel())
 
-pipeline = Pipeline([
-    ('clf', SVC(kernel='rbf', gamma=0.01, C=100))
-])
-parameters = {
-    'clf__gamma': (0.01, 0.03, 0.1, 0.3, 1, 1.3),
-    'clf__C': (0.1, 0.3, 1, 3, 10, 30, 40),
-}
+# 精度
+print(clf.score(x_train, y_train))
+y_pred = clf.predict(x_train)
+print(accuracy_score(y_pred, y_train))
 
-grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, scoring='accuracy', refit=True)
-grid_search.fit(x_train, y_train)
-
-print('最佳效果：%0.3f' % grid_search.best_score_)
-print('最优参数集：')
-best_parameters = grid_search.best_estimator_.get_params()
-for param_name in sorted(parameters.keys()):
-    print('\t%s: %r' % (param_name, best_parameters[param_name]))
-
-predictions = grid_search.predict(x_test)
 print("-------------------")
-print(classification_report(y_test, predictions))
 
-print(accuracy_score(y_test, predictions))
+print(clf.score(x_test, y_test))
+y_pred = clf.predict(x_test)
+print(accuracy_score(y_pred, y_test))
 
 

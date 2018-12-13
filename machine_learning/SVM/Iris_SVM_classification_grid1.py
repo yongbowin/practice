@@ -41,8 +41,8 @@ pipeline = Pipeline([
     ('clf', SVC(kernel='rbf', gamma=0.01, C=100))
 ])
 parameters = {
-    'clf__gamma': (0.01, 0.03, 0.1, 0.3, 1, 1.3),
-    'clf__C': (0.1, 0.3, 1, 3, 10, 30, 40),
+    'clf__gamma': (0.01, 0.03, 0.1, 0.3, 1),
+    'clf__C': (0.1, 0.3, 1, 3, 10, 30),
 }
 
 grid_search = GridSearchCV(pipeline, parameters, n_jobs=-1, verbose=1, scoring='accuracy', refit=True)
