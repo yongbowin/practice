@@ -11,6 +11,7 @@ def dt_classifier():
     clf = clf.fit(X, Y)
 
     print(clf.predict([[2., 2.]]))
+    print(clf.predict_proba([[2., 2.]]))  # 预测每个类的概率
 
 
 dt_classifier()
